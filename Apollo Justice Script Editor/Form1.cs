@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -204,7 +204,7 @@ namespace Apollo_Justice_Script_Editor
             GotoFound(fs, numoffound);
         }
 
-        void ResetFinding() //Reseting finding
+        void ResetFinding() //Resetting finding
         {
             button2.Enabled = false;
             button3.Enabled = false;
@@ -263,7 +263,7 @@ namespace Apollo_Justice_Script_Editor
             textBox1.ScrollToCaret();
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e) //updating Ui elements after writing something in find textbox
+        private void textBox2_TextChanged(object sender, EventArgs e) //updating UI elements after writing something in find textbox
         {
             button1.Enabled = textBox2.Text != null || textBox2.Text != "";
             button5.Enabled = textBox2.Text != null || textBox2.Text != "";
@@ -273,6 +273,86 @@ namespace Apollo_Justice_Script_Editor
         {
             button1.Enabled = textBox2.Text != null || textBox2.Text != "";
             button5.Enabled = textBox2.Text != null || textBox2.Text != "";
+        }
+
+        private void buttonExtractReplies_Click(object sender, EventArgs e)
+        {
+            if (!loaded)
+                return;
+
+            string[] data = textBox1.Lines;
+            List<string> replies = ExtractAllReplies(data);
+            listBoxReplies.Items.Clear();
+            listBoxReplies.Items.AddRange(replies.ToArray());
+        }
+
+        private List<string> ExtractAllReplies(string[] data)
+        {
+            List<string> replies = new List<string>();
+            int index = 0;
+            string tag = "";
+            bool inTag = false;
+            string temp = "";
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                char[] st = data[i].ToCharArray();
+                for (int j = 0; j < st.Length; j++)
+                {
+                    if (inTag)
+                    {
+                        tag += st[j];
+                        if (st[j] == '>')
+                        {
+                            inTag = false;
+                            if (ScriptHelper.TagFinish(tag))
+                            {
+                                replies.Add(temp);
+                                temp = "";
+                            }
+                            else if (ScriptHelper.TagNext(tag))
+                            {
+                                temp += tag;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (st[j] == '<')
+                        {
+                            inTag = true;
+                            tag = "<";
+                        }
+                        else if (st[j] == '>')
+                        {
+                            temp = "";
+                        }
+                        else
+                        {
+                            temp += st[j];
+                        }
+                    }
+                    index++;
+                }
+                index += 2;
+            }
+            return replies;
+        }
+
+        private void listBoxReplies_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxReplies.SelectedIndex == -1 || !loaded)
+                return;
+
+            string selectedReply = listBoxReplies.SelectedItem.ToString();
+            int startIndex = textBox1.Text.IndexOf(selectedReply);
+
+            if (startIndex != -1)
+            {
+                textBox1.Select(startIndex, selectedReply.Length);
+                textBox1.ForeColor = Color.Red;
+                textBox1.ScrollToCaret();
+            }
         }
     }
 }
