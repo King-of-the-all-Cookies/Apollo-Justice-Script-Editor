@@ -43,13 +43,15 @@ namespace Apollo_Justice_Script_Editor
                                 temp += tag;
                             } //If tag is not any of those, just do not place them into res
                         }
-                    } else
+                    }
+                    else
                     {
                         if (st[j] == '<') //if that's the start of tag
                         {
                             inTag = true; //start collecting tag chars
                             tag = "<";
-                        } else if (st[j] == '>') //if there is any unwanted > (like in the first text from the section start), just erase temp
+                        }
+                        else if (st[j] == '>') //if there is any unwanted > (like in the first text from the section start), just erase temp
                         {
                             temp = "";
                         }
@@ -69,13 +71,13 @@ namespace Apollo_Justice_Script_Editor
             return res;
         }
 
-        static bool TagFinish(string tag)
+        public static bool TagFinish(string tag)
         {
             return tag == "<p>" || tag == "<nextpage_button>" || tag == "<nextpage_nobutton>" || tag == "<testimony_jmp>" || tag == "<0x3F>"
                 || tag.Contains("choice_jmp") || tag.Contains("rejmp");
         }
 
-        static bool TagNext(string tag)
+        public static bool TagNext(string tag)
         {
             return tag == "<b>";
         }
@@ -89,7 +91,7 @@ namespace Apollo_Justice_Script_Editor
                 res[i] = new short[lines[i].Length];
                 for (int j = 0; j < res[i].Length; j++)
                 {
-                    string character = "" + lines[i].ToCharArray()[j]; 
+                    string character = "" + lines[i].ToCharArray()[j];
                     if (!aj3dsOrigCharConv.ContainsValue(character)) //if this is unknown char
                     {
                         character = "X"; //Replace it with X
@@ -99,7 +101,6 @@ namespace Apollo_Justice_Script_Editor
             }
             return res;
         }
-
         public static Dictionary<short, string> aj3dsOrigCharConv = new Dictionary<short, string> //Characters short codes
         {
             [0x91] = "0", //numbers
@@ -168,7 +169,7 @@ namespace Apollo_Justice_Script_Editor
             [0xef] = "_", //Some special marks
             [0xe1] = "`",
             [0xe0] = "‥",
-            [0xd6] = " ", //and a space too 
+            [0xd6] = " ", //and a space too
             [0xed] = "◇",
             [0xec] = "♪",
             [0x1eb] = "、",
@@ -293,7 +294,6 @@ namespace Apollo_Justice_Script_Editor
             [0x1bc] = "楽",
             [0x191] = "歩",
             [0x1d3] = "死",
-            [0x1e2] = "殺",
             [0x1d5] = "消",
             [0x1d9] = "牙",
             [0x1e4] = "現",
@@ -430,6 +430,5 @@ namespace Apollo_Justice_Script_Editor
             [0x263] = "“",
             [0x264] = "№"
         };
-    };
+    }
 }
-
