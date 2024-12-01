@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Apollo_Justice_Script_Editor.Properties;
 
