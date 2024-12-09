@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -79,19 +79,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\unnamed asset-e62c942efa54d4497bdd56076b699760-1.dat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\font_atlas.png" />
+    <EmbeddedResource Include="Resources\font_info.dat" />
+    <EmbeddedResource Include="Resources\MessageWindow_Bottom.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MessageWindow_Bottom.png" />
+    <EmbeddedResource Include="Resources\font_atlas-2f02a54b187e54fed9f3444bfbfb7092-1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\font_atlas-2f02a54b187e54fed9f3444bfbfb7092-1.png" />
+    <EmbeddedResource Include="Resources\font_atlas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
