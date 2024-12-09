@@ -88,7 +88,7 @@ namespace Apollo_Justice_Script_Editor
 
         static FontInfo ReadData(byte[] data) //Unity Data Header Reading
         {
-            byte[] header = new byte[44]; 
+            byte[] header = new byte[44];
             for (int i = 0; i < 44; i++)
             {
                 header[i] = data[i];
@@ -108,11 +108,17 @@ namespace Apollo_Justice_Script_Editor
             return foi;
         }
 
+        private static byte[] GetFontInfo()
+        {
+            //return Resources.font_info;
+            return File.ReadAllBytes("font_info.dat");
+        }
+
         public static FontInfo GetInstance()
         {
             if (fi == null)
             {
-                fi = ReadData(Resources.font_info);
+                fi = ReadData(GetFontInfo());
             }
             return fi;
         }
