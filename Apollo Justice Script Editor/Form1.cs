@@ -20,10 +20,10 @@ namespace Apollo_Justice_Script_Editor
         public Form1()
         {
             InitializeComponent();
-            textBox1.Click += On_Click;
+            richTextBox1.Click += On_Click;
             saveToolStripMenuItem.Enabled = false;
             saveAsToolStripMenuItem.Enabled = false;
-            textBox1.Enabled = false;
+            richTextBox1.Enabled = false;
             groupBox1.Enabled = false;
         }
 
@@ -48,15 +48,15 @@ namespace Apollo_Justice_Script_Editor
                     return;
                 }
             }
-            textBox1.Lines = File.ReadAllLines(scpath);
+            richTextBox1.Lines = File.ReadAllLines(scpath);
             md = new MessageDrawer();
             gr = pictureBox1.CreateGraphics();
             loaded = true;
             filePath = scpath;
             saveToolStripMenuItem.Enabled = true; //updating all UI elements
             saveAsToolStripMenuItem.Enabled = true;
-            textBox1.ScrollBars = ScrollBars.Vertical;
-            textBox1.Enabled = true;
+            richTextBox1.ScrollBars = (RichTextBoxScrollBars)ScrollBars.Vertical;
+            richTextBox1.Enabled = true;
             groupBox1.Enabled = true;
             button1.Enabled = false;
             button2.Enabled = false;
@@ -79,7 +79,7 @@ namespace Apollo_Justice_Script_Editor
 
         async void ShowMessage()
         {
-            string dial = ScriptHelper.GetMessage(textBox1.Lines, textBox1.SelectionStart);
+            string dial = ScriptHelper.GetMessage(richTextBox1.Lines, richTextBox1.SelectionStart);
             if (dial == null)
                 return;
             short[][] shorts = ScriptHelper.GetMessageShorts(dial);
@@ -88,7 +88,7 @@ namespace Apollo_Justice_Script_Editor
             md.DrawMessage(shorts, gr);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             if (!loaded)
                 return;
@@ -101,7 +101,7 @@ namespace Apollo_Justice_Script_Editor
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) //saving into last file
         {
-            File.WriteAllLines(filePath, textBox1.Lines);
+            File.WriteAllLines(filePath, richTextBox1.Lines);
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -124,14 +124,14 @@ namespace Apollo_Justice_Script_Editor
                 }
             }
             filePath = scpath;
-            File.WriteAllLines(filePath, textBox1.Lines); //writing lines in file
+            File.WriteAllLines(filePath, richTextBox1.Lines); //writing lines in file
         }
 
         public int[] Find(string seek) //finding text in file
         {
             infinding = true;
             List<int> sels = new List<int>();
-            string[] text = textBox1.Lines;
+            string[] text = richTextBox1.Lines;
             int len = 0;
             for (int i = 0; i < text.Length; i++)
             {
@@ -154,7 +154,7 @@ namespace Apollo_Justice_Script_Editor
             }
             for (int i = 0; i < sels.Length; i++)
             {
-                if (sels[i] >= textBox1.SelectionStart)
+                if (sels[i] >= richTextBox1.SelectionStart)
                 {
                     GotoFound(sels, i);
                     break;
@@ -166,7 +166,7 @@ namespace Apollo_Justice_Script_Editor
 
         void GotoFound(int[] sels, int ind) //replacing cursor to a found text
         {
-            textBox1.SelectionStart = sels[ind];
+            richTextBox1.SelectionStart = sels[ind];
             numoffound = ind;
             if (numoffound >= sels.Length - 1 && numoffound != 0)
             {
@@ -188,8 +188,8 @@ namespace Apollo_Justice_Script_Editor
                 button2.Enabled = true;
                 button3.Enabled = true;
             }
-            textBox1.Focus();
-            textBox1.ScrollToCaret();
+            richTextBox1.Focus();
+            richTextBox1.ScrollToCaret();
         }
 
         private void button2_Click(object sender, EventArgs e) //Next button
@@ -217,13 +217,13 @@ namespace Apollo_Justice_Script_Editor
         private void button4_Click(object sender, EventArgs e) //Replace button
         {
             int cur = -1;
-            if (!fs.Contains(textBox1.SelectionStart))
+            if (!fs.Contains(richTextBox1.SelectionStart))
             {
                 button1_Click(sender, e);
             }
             else
             {
-                string[] text = textBox1.Lines;
+                string[] text = richTextBox1.Lines;
                 for (int i = 0; i < text.Length; i++)
                 {
                     if (text[i].Contains(textBox2.Text))
@@ -235,9 +235,9 @@ namespace Apollo_Justice_Script_Editor
                             string temp = text[i].Remove(t, textBox2.Text.Length);
                             text[i] = temp.Insert(t, textBox3.Text);
                             loaded = false;
-                            textBox1.Lines = text;
+                            richTextBox1.Lines = text;
                             loaded = true;
-                            textBox1.SelectionStart = fs[numoffound];
+                            richTextBox1.SelectionStart = fs[numoffound];
                             button4.Enabled = false;
                             button1_Click(sender, e);
                             break;
@@ -249,18 +249,18 @@ namespace Apollo_Justice_Script_Editor
 
         private void button5_Click(object sender, EventArgs e) //Replace all button
         {
-            int selc = textBox1.SelectionStart;
-            string[] text = textBox1.Lines;
+            int selc = richTextBox1.SelectionStart;
+            string[] text = richTextBox1.Lines;
             for (int i = 0; i < text.Length; i++)
             {
                 text[i] = text[i].Replace(textBox2.Text, textBox3.Text);
             }
             loaded = false;
-            textBox1.Lines = text;
+            richTextBox1.Lines = text;
             loaded = true;
-            textBox1.SelectionStart = selc;
-            textBox1.Focus();
-            textBox1.ScrollToCaret();
+            richTextBox1.SelectionStart = selc;
+            richTextBox1.Focus();
+            richTextBox1.ScrollToCaret();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e) //updating UI elements after writing something in find textbox
@@ -280,7 +280,7 @@ namespace Apollo_Justice_Script_Editor
             if (!loaded)
                 return;
 
-            string[] data = textBox1.Lines;
+            string[] data = richTextBox1.Lines;
             List<string> replies = ExtractAllReplies(data);
             listBoxReplies.Items.Clear();
             listBoxReplies.Items.AddRange(replies.ToArray());
@@ -345,13 +345,23 @@ namespace Apollo_Justice_Script_Editor
                 return;
 
             string selectedReply = listBoxReplies.SelectedItem.ToString();
-            int startIndex = textBox1.Text.IndexOf(selectedReply);
+            int startIndex = richTextBox1.Text.IndexOf(selectedReply);
 
             if (startIndex != -1)
             {
-                textBox1.Select(startIndex, selectedReply.Length);
-                textBox1.ForeColor = Color.Red;
-                textBox1.ScrollToCaret();
+                HighlightText(startIndex, selectedReply.Length);
+                richTextBox1.ScrollToCaret();
+            }
+        }
+
+        private void HighlightText(int startIndex, int length)
+        {
+            // Ensure the indices are within the text bounds
+            if (startIndex >= 0 && startIndex + length <= richTextBox1.Text.Length)
+            {
+                richTextBox1.Select(startIndex, length); // Select the text
+                richTextBox1.SelectionBackColor = Color.Red; // Change the background color of the selected text
+                richTextBox1.DeselectAll(); // Deselect the text to remove the highlight
             }
         }
     }
