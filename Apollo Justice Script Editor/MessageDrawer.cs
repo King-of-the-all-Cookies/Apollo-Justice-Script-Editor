@@ -102,6 +102,12 @@ namespace Apollo_Justice_Script_Editor
             return offsets[x];
         }
 
+        private Image GetAtlasImage()
+        {
+            //return Resources.font_atlas;
+            return Image.FromFile("font_atlas.png");
+        }
+
         public Image CutGlyph(FontInfo.CharacterData cd)
         {
             Rectangle rct = new Rectangle((int)cd.rx, (int)FontInfo.GetInstance().TextureSizeY - (int)cd.ry - (int)cd.rh, (int)cd.rw, (int)cd.rh + 1);
@@ -109,7 +115,7 @@ namespace Apollo_Justice_Script_Editor
             {
                 rct = new Rectangle((int)FontInfo.GetInstance().TextureSizeX - 2, (int)FontInfo.GetInstance().TextureSizeY - 2, 1, 1);
             }
-            Bitmap bmp = Resources.font_atlas as Bitmap; //The character's place on atlas is saved in rct
+            Bitmap bmp = GetAtlasImage() as Bitmap; //The character's place on atlas is saved in rct
             if (bmp == null)
                 throw new ArgumentException("No bitmap");
             Bitmap cropBmp = bmp.Clone(rct, bmp.PixelFormat);
